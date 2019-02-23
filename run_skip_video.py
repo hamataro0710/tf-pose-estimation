@@ -1,7 +1,7 @@
 import argparse
 import logging
 import time
-
+import os
 import cv2
 import numpy as np
 
@@ -22,6 +22,8 @@ fps_time = 0
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='tf-pose-estimation Video')
+    parser.add_argument('--path', type=str, default="")
+    parser.add_argument('--write', type=str, default=None)
     parser.add_argument('--video', type=str, default='')
     parser.add_argument('--resolution', type=str, default='432x368', help='network input resolution. default=432x368')
     parser.add_argument('--model', type=str, default='mobilenet_thin', help='cmu / mobilenet_thin')
@@ -33,14 +35,24 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     logger.debug('initialization #s : #s') # (args.model, get_graph_path(args.model)))
+
+    # data directory
+    if args.path:
+        path_movie_src = os.path.join(args.path, 'movie', args.video)
+    else:
+        path_movie_src = args.video
+    path_movie_out = os.path.join(args.path, 'movie_estimated')
+    path_csv_estimated = os.path.join(args.path, 'data_estimated')
+    path_png_estimated = os.path.join(args.path, 'png_estimated')
+
     w, h = model_wh(args.resolution)
     e = TfPoseEstimator(get_graph_path(args.model), target_size=(w, h))
-    cap = cv2.VideoCapture(args.video)
+    cap = cv2.VideoCapture(path_movie_src)
 
     if cap.isOpened() is False:
         print("Error opening video stream or file")
     frame_no = 0
-
+    f = open(os.path.join(path_csv_estimated,"test.txt"), 'w')
     while cap.isOpened():
         ret_val, image = cap.read()
         if not ret_val:
@@ -50,13 +62,14 @@ if __name__ == '__main__':
             humans = e.inference(image, resize_to_default=(w > 0 and h > 0), upsample_size=args.resize_out_ratio)
             print(humans)
             print(frame_no)
+            f.writelines(humans)
             if not args.showBG:
                 image = np.zeros(image.shape)
             image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
             plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))            
             bgimg = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BGR2RGB)
             bgimg = cv2.resize(bgimg, (e.heatMat.shape[1], e.heatMat.shape[0]), interpolation=cv2.INTER_AREA)
-            plt.savefig("../"+args.video.split('.')[-2] + str(frame_no) + ".png")
+            plt.savefig(os.path.join(path_png_estimated, args.video.split('.')[-2] + str(frame_no) + ".png"))
             # plt.savefig("../short/"+args.video.split('.')[-2] + '{%06d}'.format(frame_no) + ".png")
         frame_no += 1
         # cv2.putText(image, "FPS: #f" # (1.0 / (time.time() - fps_time)), (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
@@ -64,6 +77,6 @@ if __name__ == '__main__':
         # fps_time = time.time()
         if cv2.waitKey(1) == 27:
             break
-
+    f.close()
     cv2.destroyAllWindows()
 logger.debug('finished+')
