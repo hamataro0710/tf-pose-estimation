@@ -74,10 +74,10 @@ if __name__ == '__main__':
             plt.savefig(os.path.join(path_png_estimated,
                                      args.video.split('.')[-2] + '{:06d}'.format(frame_no) + ".png"))
             # plt.savefig("../short/"+args.video.split('.')[-2] + '{%06d}'.format(frame_no) + ".png")
-            frame_no += 1
-            # cv2.putText(image, "FPS: #f" # (1.0 / (time.time() - fps_time)), (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-            # cv2.imshow('tf-pose-estimation result', image)
-            # fps_time = time.time()
+        frame_no += 1
+        # cv2.putText(image, "FPS: #f" # (1.0 / (time.time() - fps_time)), (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        # cv2.imshow('tf-pose-estimation result', image)
+        # fps_time = time.time()
         if cv2.waitKey(1) == 27:
             break
     # f.close()
