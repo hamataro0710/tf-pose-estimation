@@ -71,7 +71,7 @@ if __name__ == '__main__':
         bgimg = cv2.cvtColor(image.astype(np.uint8), cv2.COLOR_BGR2RGB)
         bgimg = cv2.resize(bgimg, (e.heatMat.shape[1], e.heatMat.shape[0]), interpolation=cv2.INTER_AREA)
         plt.savefig(os.path.join(path_png_estimated,
-                                 args.video.split('.')[-2] + '{%06d}'.format(frame_no) + ".png"))
+                                 args.video.split('.')[-2] + '{:06d}'.format(frame_no) + ".png"))
         # plt.savefig("../short/"+args.video.split('.')[-2] + '{%06d}'.format(frame_no) + ".png")
         frame_no += 1
         # cv2.putText(image, "FPS: #f" # (1.0 / (time.time() - fps_time)), (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
