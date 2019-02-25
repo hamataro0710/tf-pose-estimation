@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 from tf_pose.estimator import TfPoseEstimator
 from tf_pose.networks import get_graph_path, model_wh
+from humans_to_array import humans_to_array
 
 logger = logging.getLogger('TfPoseEstimator')
 logger.setLevel(logging.DEBUG)
@@ -46,7 +47,7 @@ if __name__ == '__main__':
     elapsed = time.time() - t
 
     logger.info('inference image: %s in %.4f seconds.' % (args.image, elapsed))
-
+    humans_to_array(humans)
     image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
 
     import matplotlib.pyplot as plt
