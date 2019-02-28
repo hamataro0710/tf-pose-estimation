@@ -12,9 +12,9 @@ def humans_to_array(humans):
 
         for i in range(common.CocoPart.Background.value):
             if i not in human.body_parts.keys():
-                array_humans.append([i, np.nan, np.nan, 0])
+                array_humans.append(i, np.nan, np.nan, 0)
             else:
-                array_humans.append([i, human.body_parts[i].x, human.body_parts[i].y, human.body_parts[i].score])
+                array_humans.append(i, human.body_parts[i].x, human.body_parts[i].y, human.body_parts[i].score)
 
             # body_part = human.body_parts[i]
             # center = (int(body_part.x * image_w + 0.5), int(body_part.y * image_h + 0.5))
