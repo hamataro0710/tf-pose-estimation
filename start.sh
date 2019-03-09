@@ -1,4 +1,4 @@
-git clone https://github.com/hamataro0710/kempo-motion-analysis.git
+# git clone https://github.com/hamataro0710/kempo-motion-analysis.git
 apt-get install swig
 apt-get install ffmpeg
 cd kempo-motion-analysis/
